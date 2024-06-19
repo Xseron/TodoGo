@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Xseron/MyExtraGo/components"
-	"github.com/Xseron/MyExtraGo/domain"
+	"github.com/Xseron/TodoGo/components"
+	"github.com/Xseron/TodoGo/domain"
 	"github.com/go-chi/chi/v5"
 )
 

@@ -1,4 +1,4 @@
-module github.com/Xseron/MyExtraGo
+module github.com/Xseron/TodoGo
 
 go 1.21.3
 

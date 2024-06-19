@@ -16,7 +16,7 @@ import "strings"
 
 import (
 	"fmt"
-	"github.com/Xseron/MyExtraGo/domain"
+	"github.com/Xseron/TodoGo/domain"
 )
 
 func head(title string) templ.Component {

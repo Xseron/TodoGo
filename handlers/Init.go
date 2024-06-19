@@ -8,7 +8,7 @@ import (
 func Init() *chi.Mux {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
-	addHandlers(router, mainHandlers)
+	addHandlers(router, mainHandlers, todoHandler)
 	return router
 }
 

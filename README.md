@@ -1,4 +1,4 @@
-# MyExtra
+# TodoGo
 
 GOTTH project
 
@@ -11,12 +11,16 @@ GOTTH project
 - toastify
 
 ### Project structure
-- cdk - Infrastructure setup for deploying the application.
 - components - templ components.
 - db - Database access code used to increment and get counts.
 - handlers - HTTP handlers.
 - services - Services used by the handlers.
 - session - Middleware for implementing HTTP session IDs.
+- logging - Logging service
+- domain - All bussnes logic with no dependencies (DDD concept)
 - main.go - Used to run the application locally.
+
+### Features
+
 
 

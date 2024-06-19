@@ -5,7 +5,7 @@ package components
 
 import (
     "fmt"
-    "github.com/Xseron/MyExtraGo/domain"
+    "github.com/Xseron/TodoGo/domain"
 )
 
 templ head(title string){
@@ -135,6 +135,7 @@ templ TodoElementTemplate(element domain.TodoElement) {
 }
 
 templ OOBTodoElementTemplate(element domain.TodoElement) {
+    <!-- TODO change afterbegin to anouther css selector -->
     <ul id="todoList" hx-swap-oob="afterbegin">
         @TodoElementTemplate(element)
     </ul>

@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/Xseron/MyExtraGo/handlers"
+	"github.com/Xseron/TodoGo/handlers"
 )
 
 func main() {
