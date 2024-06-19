@@ -1,0 +1,153 @@
+package components
+
+// TODO Separate this components
+// TODO make mode beautiful
+
+import (
+    "fmt"
+    "github.com/Xseron/MyExtraGo/domain"
+)
+
+templ MainTemplate(title string, data *domain.TodoData) {
+	<!DOCTYPE html>
+    <html data-theme="business" lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{title}</title>
+        <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+        <!-- css dependencies -->
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    </head>
+    <body>
+        <main class="container mx-auto p-4">
+            <div class="card bg-white shadow-xl p-6 rounded-lg">    
+                <h2 class="card-title text-center mb-4 text-2xl font-bold">Todo List</h2>
+                @TodoListElement(data)
+                <div class="divider"></div> 
+                @EmptyFormTemplate()
+            </div>
+        </main>
+
+        <script src="https://unpkg.com/htmx.org@2.0.0"></script>
+    </body>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+    var errorToast = Toastify({
+        text: "Erorr template toast",
+        duration: 3000,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+        },
+    })
+    document.body.addEventListener('htmx:beforeSwap', function (evt) {
+        if (evt.detail.xhr.status === 422) {
+            evt.detail.shouldSwap = true;
+            evt.detail.isError = false;
+        }
+    });
+    </script>
+    </html>
+}
+
+templ EmptyFormTemplate() {
+    <form id="todoInfo" hx-put="/todo/add" hx-swap="outerHTML">
+        <div class="form-control mb-4">
+            <!--TODO mark as title -->
+            <label class="label">
+                <span class="label-text font-semibold">Name</span>
+            </label>
+            <input type="text" name="name" placeholder="Enter name" class="input input-bordered w-full"
+                required>
+        </div>
+        <div class="form-control mb-4">
+            <label class="label">
+                <span class="label-text font-semibold">Status</span>
+            </label>
+            <select name="status" class="select select-bordered w-full">
+                <option value="0">Planning</option>
+                <option value="1">Doing</option>
+                <option value="2">Done</option>
+                <option value="3">Dropped</option>
+            </select>
+        </div>
+        <div class="form-control">
+            <button type="submit" class="btn btn-primary w-full">Submit</button>
+        </div>
+    </form>
+}
+
+templ ErrorTemplate(formData *domain.FormData) {
+    <form id="todoInfo" hx-put="/todo/add" hx-swap="outerHTML">
+        <div class="form-control mb-4">
+            <label class="label">
+                <span class="label-text font-semibold">Name</span>
+            </label>
+            <input type="text" name="name" placeholder="Enter name" class="input input-bordered w-full" value={formData.Values["name"]} required>
+            if errorInfo, ok := formData.Errors["name"]; ok {
+                <div id="error-message" class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+                    <span id="error-text">{errorInfo}</span>
+                </div>
+            }
+        </div>
+        <div class="form-control mb-4">
+            <label class="label">
+                <span class="label-text font-semibold">Status</span>
+            </label>
+            <select name="status" class="select select-bordered w-full">
+                <option value="0" if formData.Values["status"] == "0" { selected }>Planning</option>
+                <option value="1" if formData.Values["status"] == "1" { selected }>Doing</option>
+                <option value="2" if formData.Values["status"] == "2" { selected }>Done</option>
+                <option value="3" if formData.Values["status"] == "3" { selected }>Dropped</option>
+            </select>
+        </div>
+        <div class="form-control">
+            <button type="submit" class="btn btn-primary w-full">Submit</button>
+        </div>
+    </form>
+}
+
+css coloredButton(color string){
+    background-color: {color};
+}
+
+templ TodoElementTemplate(element domain.TodoElement) {
+    <li id={fmt.Sprintf("todo-%d", element.ID)} class="flex justify-between items-center p-4 rounded-lg shadow">
+        <span class="flex items-left items-center">
+        <button class={coloredButton(element.GetColor()), "text-transparent rounded-full w-6 h-6 flex items-center justify-center mr-2"}>&#9679;</button>
+        <span>{element.Title}</span>
+        </span>
+        <span>
+            <button hx-delete={string(templ.URL(fmt.Sprintf("/todo/%d", element.ID)))} hx-swap="outerHTML" hx-target={fmt.Sprintf("#todo-%d", element.ID)} class="btn btn-error btn-sm">Delete</button>
+        </span>
+    </li>
+}
+
+templ OOBTodoElementTemplate(element domain.TodoElement) {
+    <ul id="todoList" hx-swap-oob="afterbegin">
+        @TodoElementTemplate(element)
+    </ul>
+}
+
+templ TodoListElement(data *domain.TodoData) {
+    <ul id="todoList">
+    for _, item := range *data {
+        @TodoElementTemplate(item)
+    }
+    </ul>
+}
+
+templ GlobalErrorTemplate(err string) {
+    <!-- TODO correct error info -->
+    <script>
+        errorToast.showToast()
+    </script>
+}
