@@ -38,7 +38,8 @@ func (data *TodoData) GetElementById(id int) (int, TodoElement) {
 	return -1, TodoElement{}
 }
 
-func (data *TodoData) AddElement(title string, status TodoStatus) (TodoElement, error) {
+//
+func (data *TodoData) AddTodoElement(title string, status TodoStatus) (TodoElement, error) {
 	if len(title) < 3 {
 		return TodoElement{}, errors.New("lengths need to be > 3")
 	}
@@ -47,7 +48,7 @@ func (data *TodoData) AddElement(title string, status TodoStatus) (TodoElement, 
 	return el, nil
 }
 
-func (data *TodoData) DeleteElement(id int) (TodoElement, error) {
+func (data *TodoData) DeleteTodoElement(id int) (TodoElement, error) {
 	index, element := data.GetElementById(id)
 	if index == -1 {
 		return TodoElement{}, errors.New("nothing to delete")

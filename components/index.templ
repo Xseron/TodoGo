@@ -8,8 +8,8 @@ import (
     "github.com/Xseron/MyExtraGo/domain"
 )
 
-templ MainTemplate(title string, data *domain.TodoData) {
-	<!DOCTYPE html>
+templ head(title string){
+    <!DOCTYPE html>
     <html data-theme="business" lang="en">
     <head>
         <meta charset="UTF-8">
@@ -23,6 +23,10 @@ templ MainTemplate(title string, data *domain.TodoData) {
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     </head>
+}
+
+templ MainTemplate(data *domain.TodoData) {
+	@head("Sumple TODO App")
     <body>
         <main class="container mx-auto p-4">
             <div class="card bg-white shadow-xl p-6 rounded-lg">    
@@ -32,9 +36,8 @@ templ MainTemplate(title string, data *domain.TodoData) {
                 @EmptyFormTemplate()
             </div>
         </main>
-
-        <script src="https://unpkg.com/htmx.org@2.0.0"></script>
     </body>
+    <script src="https://unpkg.com/htmx.org@2.0.0"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
     var errorToast = Toastify({
